@@ -74,41 +74,73 @@ public class Main {
         }    
     }
 
-    public static void main(String[] args) {
-    // 1. Karışık bir test dizisi oluştur (CSV'deki volume verilerini temsil eder)
-    int[] testData = {31880, 8408, 15628, 8882, 10260, 6071, 7186, 9419};
+    public static void mergeSort(int A[]){
 
-    System.out.println("Sıralama Öncesi:");
-    printArray(testData);
+        int n = A.length;
+        int[] temp = new int [n];
+        int currSize = 1;
+        while (currSize < n){
 
-    // 2. Test etmek istediğin algoritmayı çağır
-    // quickSort(testData, 0, testData.length - 1); // Quick Sort için bunu aç
-    insertionSort(testData);                       // Insertion Sort için bunu aç
+            int leftStart = 0;
 
-    System.out.println("\nSıralama Sonrası:");
-    printArray(testData);
-    
-    // 3. Doğrulama Kontrolü
-    if (isSorted(testData)) {
-        System.out.println("\nTEBRİKLER: Dizi başarıyla sıralandı! ✅");
-    } else {
-        System.out.println("\nHATA: Dizi hala karışık! ❌");
+            while (leftStart < n-1){
+
+                int mid = Math.min(leftStart + currSize - 1, n-1);
+                int rightEnd = Math.min(leftStart + 2*currSize-1, n-1);
+                merge(A, temp, leftStart, mid, rightEnd);
+                leftStart = leftStart + currSize*2;
+
+            }
+
+            currSize = currSize*2;
+
+        }
     }
-}
 
-// Diziyi ekrana yazdıran yardımcı metod
-public static void printArray(int[] A) {
-    for (int value : A) {
-        System.out.print(value + " ");
-    }
-    System.out.println();
-}
+    public static void merge(int A[], int temp[], int left, int mid, int right){
 
-// Dizinin gerçekten küçükten büyüğe olup olmadığını kontrol eden metod
-public static boolean isSorted(int[] A) {
-    for (int i = 0; i < A.length - 1; i++) {
-        if (A[i] > A[i + 1]) return false;
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        while (i <= mid && j <= right){
+
+            if (A[i] <= A[j]){
+
+                temp[k] = A[i];
+                i = i+1;
+
+            } else{
+
+                temp[k] = A[j];
+                j = j+1;
+
+            }
+
+            k = k+1;
+
+        }
+
+        while (i <= mid){
+
+            temp[k] = A[i];
+            i = i+1;
+            k = k+1;
+
+        }
+
+        while (j <= right){
+
+            temp[k] = A[j];
+            j = j+1;
+            k = k+1;
+
+        }
+
+        for (i = left; i <= right; i++){
+
+            A[i] = temp[i];
+
+        }
     }
-    return true;
-}
 }
